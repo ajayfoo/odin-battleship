@@ -4,9 +4,9 @@ const createGameboard = () => {
   const grid = Array.from(new Array(10), () =>
     Array.from(new Array(10), () => null),
   );
-  const missedAttacksPoints = [];
-  const shipPlacements = [];
-  const hitPlaces = [];
+  const missedAttackCoordinatesList = [];
+  const shipCoordinatesList = [];
+  const hitCoordinatesList = [];
   const columnNameToIndex = (alphabet) => {
     const code = alphabet.toUpperCase().charCodeAt(0);
     const maxCode = 'J'.toUpperCase().charCodeAt(0);
@@ -14,9 +14,9 @@ const createGameboard = () => {
     const baseCode = 'A'.toUpperCase().charCodeAt(0);
     return code - baseCode;
   };
-  const pointToIndices = (point) => {
-    const x = point[0] - 1;
-    const y = columnNameToIndex(point[1]);
+  const coordinatesToIndices = (coordinates) => {
+    const x = coordinates[0] - 1;
+    const y = columnNameToIndex(coordinates[1]);
     return [x, y];
   };
 
@@ -29,13 +29,13 @@ const createGameboard = () => {
     return true;
   };
 
-  const placeShipAt = (point, vertical, length) => {
+  const placeShipAt = (coordinates, vertical, length) => {
     const ship = createShip(length);
-    let [x, y] = pointToIndices(point);
+    let [x, y] = coordinatesToIndices(coordinates);
     if (!shipCanBePlacedAt(x, y, ship, vertical)) {
       throw new Error("Ships can't overlap");
     }
-    shipPlacements.push([x, y]);
+    shipCoordinatesList.push([x, y]);
     for (let i = 0; i < ship.getLength(); ++i) {
       grid[x][y] = ship;
       if (vertical) ++x;
@@ -43,34 +43,36 @@ const createGameboard = () => {
     }
   };
 
-  const receiveAttack = (point) => {
+  const receiveAttack = (coordinates) => {
     if (
-      hitPlaces.some((place) => place[0] === point[0] && place[1] === point[1])
+      hitCoordinatesList.some(
+        (place) => place[0] === coordinates[0] && place[1] === coordinates[1],
+      )
     ) {
       throw new Error("Can't hit the same location more than once");
     }
-    hitPlaces.push(point);
-    const [x, y] = pointToIndices(point);
+    hitCoordinatesList.push(coordinates);
+    const [x, y] = coordinatesToIndices(coordinates);
     if (grid[x][y] === null) {
-      missedAttacksPoints.push(point);
+      missedAttackCoordinatesList.push(coordinates);
       return;
     }
     grid[x][y].takeHit();
   };
   const allShipsHaveSunk = () => {
-    for (let i = 0; i < shipPlacements.length; ++i) {
-      const [x, y] = shipPlacements[i];
+    for (let i = 0; i < shipCoordinatesList.length; ++i) {
+      const [x, y] = shipCoordinatesList[i];
       if (!grid[x][y].hasSunk()) return false;
     }
     return true;
   };
-  const getMissedAttacksPoints = () => missedAttacksPoints;
+  const getMissedAttackCoordinatesList = () => missedAttackCoordinatesList;
 
   return {
     placeShipAt,
     receiveAttack,
     allShipsHaveSunk,
-    getMissedAttacksPoints,
+    getMissedAttackCoordinatesList,
   };
 };
 

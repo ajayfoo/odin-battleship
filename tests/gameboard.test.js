@@ -19,7 +19,7 @@ test('Sink two ships', () => {
   expect(gameboard.allShipsHaveSunk()).toBe(true);
 });
 
-test('Throw error when placing ship on a ship that has the same placement', () => {
+test('Throw error when placing ship on a ship that has the same coordinates', () => {
   const gameboard = createGameboard();
   gameboard.placeShipAt([1, 'A'], false, 2);
   expect(() => gameboard.placeShipAt([1, 'A'], true, 2)).toThrow(
@@ -38,7 +38,7 @@ test('Throw error when placing ship that will over overlap with another ship', (
   );
 });
 
-test('Throw error when hit on the same location', () => {
+test('Throw error when hit on the same coordinates', () => {
   const gameboard = createGameboard();
   gameboard.placeShipAt([1, 'A'], false, 2);
   gameboard.receiveAttack([1, 'A']);
@@ -47,16 +47,16 @@ test('Throw error when hit on the same location', () => {
   );
 });
 
-test('Get all missed hits attacks', () => {
+test('Get all missed attack coordinates', () => {
   const gameboard = createGameboard();
-  const expectedMissedAttackPoints = [
+  const expectedMissedAttackCoordinates = [
     [1, 'A'],
     [2, 'A'],
     [3, 'A'],
     [4, 'A'],
   ];
-  expectedMissedAttackPoints.forEach(gameboard.receiveAttack);
-  expect(gameboard.getMissedAttacksPoints()).toStrictEqual(
-    expectedMissedAttackPoints,
+  expectedMissedAttackCoordinates.forEach(gameboard.receiveAttack);
+  expect(gameboard.getMissedAttackCoordinatesList()).toStrictEqual(
+    expectedMissedAttackCoordinates,
   );
 });
