@@ -1,4 +1,4 @@
-import createShip from '../models/ship';
+import createShip from './ship';
 
 const createGameboard = () => {
   const grid = Array.from(new Array(10), () =>
