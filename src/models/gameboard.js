@@ -17,17 +17,26 @@ const createGameboard = () => {
     const y = columnNameToIndex(point[1]);
     return [x, y];
   };
+
+  const shipCanBePlacedAt = (x, y, ship, vertical) => {
+    for (let i = 0; i < ship.getLength(); ++i) {
+      if (grid[x][y] !== null) return false;
+      if (vertical) ++x;
+      else ++y;
+    }
+    return true;
+  };
+
   const placeShipAt = (point, vertical, ship) => {
     let [x, y] = pointToIndices(point);
-    if (grid[x][y] !== null) throw new Error("Ships can't overlap");
+    if (!shipCanBePlacedAt(x, y, ship, vertical)) {
+      throw new Error("Ships can't overlap");
+    }
     shipPlacements.push([x, y]);
     for (let i = 0; i < ship.getLength(); ++i) {
       grid[x][y] = ship;
-      if (vertical) {
-        ++x;
-      } else {
-        ++y;
-      }
+      if (vertical) ++x;
+      else ++y;
     }
   };
 
