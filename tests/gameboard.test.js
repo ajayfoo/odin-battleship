@@ -1,9 +1,8 @@
-import createShip from '../src/models/ship';
 import createGameboard from '../src/models/gameboard';
 
 test('Sink one ships', () => {
   const gameboard = createGameboard();
-  gameboard.placeShipAt([1, 'A'], false, createShip(2));
+  gameboard.placeShipAt([1, 'A'], false, 2);
   gameboard.receiveAttack([1, 'A']);
   gameboard.receiveAttack([1, 'B']);
   expect(gameboard.allShipsHaveSunk()).toBe(true);
@@ -11,8 +10,8 @@ test('Sink one ships', () => {
 
 test('Sink two ships', () => {
   const gameboard = createGameboard();
-  gameboard.placeShipAt([1, 'A'], false, createShip(2));
-  gameboard.placeShipAt([3, 'J'], true, createShip(2));
+  gameboard.placeShipAt([1, 'A'], false, 2);
+  gameboard.placeShipAt([3, 'J'], true, 2);
   gameboard.receiveAttack([1, 'A']);
   gameboard.receiveAttack([1, 'B']);
   gameboard.receiveAttack([3, 'J']);
@@ -22,28 +21,42 @@ test('Sink two ships', () => {
 
 test('Throw error when placing ship on a ship that has the same placement', () => {
   const gameboard = createGameboard();
-  gameboard.placeShipAt([1, 'A'], false, createShip(2));
-  expect(() => gameboard.placeShipAt([1, 'A'], true, createShip(2))).toThrow(
+  gameboard.placeShipAt([1, 'A'], false, 2);
+  expect(() => gameboard.placeShipAt([1, 'A'], true, 2)).toThrow(
     new Error("Ships can't overlap"),
   );
 });
 
 test('Throw error when placing ship that will over overlap with another ship', () => {
   const gameboard = createGameboard();
-  gameboard.placeShipAt([1, 'B'], false, createShip(2));
-  expect(() => gameboard.placeShipAt([1, 'C'], true, createShip(2))).toThrow(
+  gameboard.placeShipAt([1, 'B'], false, 2);
+  expect(() => gameboard.placeShipAt([1, 'C'], true, 2)).toThrow(
     new Error("Ships can't overlap"),
   );
-  expect(() => gameboard.placeShipAt([1, 'A'], false, createShip(2))).toThrow(
+  expect(() => gameboard.placeShipAt([1, 'A'], false, 2)).toThrow(
     new Error("Ships can't overlap"),
   );
 });
 
 test('Throw error when hit on the same location', () => {
   const gameboard = createGameboard();
-  gameboard.placeShipAt([1, 'A'], false, createShip(2));
+  gameboard.placeShipAt([1, 'A'], false, 2);
   gameboard.receiveAttack([1, 'A']);
   expect(() => gameboard.receiveAttack([1, 'A'])).toThrow(
     new Error("Can't hit the same location more than once"),
+  );
+});
+
+test('Get all missed hits attacks', () => {
+  const gameboard = createGameboard();
+  const expectedMissedAttackPoints = [
+    [1, 'A'],
+    [2, 'A'],
+    [3, 'A'],
+    [4, 'A'],
+  ];
+  expectedMissedAttackPoints.forEach(gameboard.receiveAttack);
+  expect(gameboard.getMissedAttacksPoints()).toStrictEqual(
+    expectedMissedAttackPoints,
   );
 });

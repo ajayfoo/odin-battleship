@@ -1,8 +1,10 @@
+import createShip from '../models/ship';
+
 const createGameboard = () => {
   const grid = Array.from(new Array(10), () =>
     Array.from(new Array(10), () => null),
   );
-  const missedShots = [];
+  const missedAttacksPoints = [];
   const shipPlacements = [];
   const hitPlaces = [];
   const columnNameToIndex = (alphabet) => {
@@ -27,7 +29,8 @@ const createGameboard = () => {
     return true;
   };
 
-  const placeShipAt = (point, vertical, ship) => {
+  const placeShipAt = (point, vertical, length) => {
+    const ship = createShip(length);
     let [x, y] = pointToIndices(point);
     if (!shipCanBePlacedAt(x, y, ship, vertical)) {
       throw new Error("Ships can't overlap");
@@ -41,13 +44,15 @@ const createGameboard = () => {
   };
 
   const receiveAttack = (point) => {
-    const [x, y] = pointToIndices(point);
-    if (hitPlaces.some((place) => place[0] === x && place[1] === y)) {
+    if (
+      hitPlaces.some((place) => place[0] === point[0] && place[1] === point[1])
+    ) {
       throw new Error("Can't hit the same location more than once");
     }
-    hitPlaces.push([x, y]);
+    hitPlaces.push(point);
+    const [x, y] = pointToIndices(point);
     if (grid[x][y] === null) {
-      missedShots.push([x, y]);
+      missedAttacksPoints.push(point);
       return;
     }
     grid[x][y].takeHit();
@@ -59,8 +64,14 @@ const createGameboard = () => {
     }
     return true;
   };
+  const getMissedAttacksPoints = () => missedAttacksPoints;
 
-  return { placeShipAt, receiveAttack, allShipsHaveSunk };
+  return {
+    placeShipAt,
+    receiveAttack,
+    allShipsHaveSunk,
+    getMissedAttacksPoints,
+  };
 };
 
 export default createGameboard;
