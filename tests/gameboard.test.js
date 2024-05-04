@@ -60,3 +60,8 @@ test('Get all missed attack coordinates', () => {
     expectedMissedAttackCoordinates,
   );
 });
+
+test('Get size', () => {
+  const gameboard = createGameboard();
+  expect(gameboard.getSize()).toStrictEqual([10, 10]);
+});

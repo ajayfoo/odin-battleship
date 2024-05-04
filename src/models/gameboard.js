@@ -1,8 +1,11 @@
 import createShip from './ship';
 
 const createGameboard = () => {
-  const grid = Array.from(new Array(10), () =>
-    Array.from(new Array(10), () => null),
+  const ROW_LENGTH = 10;
+  const COLUMN_LENGTH = 10;
+  const getSize = () => [ROW_LENGTH, COLUMN_LENGTH];
+  const grid = Array.from(new Array(ROW_LENGTH), () =>
+    Array.from(new Array(COLUMN_LENGTH), () => null),
   );
   const missedAttackCoordinatesList = [];
   const shipCoordinatesList = [];
@@ -69,6 +72,7 @@ const createGameboard = () => {
   const getMissedAttackCoordinatesList = () => missedAttackCoordinatesList;
 
   return {
+    getSize,
     placeShipAt,
     receiveAttack,
     allShipsHaveSunk,

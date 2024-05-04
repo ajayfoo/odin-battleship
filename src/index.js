@@ -1,6 +1,7 @@
-import Heading from './components';
 import './style/base.css';
+import createController from './controller';
 
-const body = document.querySelector('body');
+const controller = createController();
+const mainEle = document.querySelector('body>main');
 
-body.appendChild(Heading('Project Title'));
+mainEle.appendChild(controller.view);
