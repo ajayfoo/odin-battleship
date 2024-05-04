@@ -1,7 +1,7 @@
 .gameboard {
   display: inline-grid;
-  grid-template-columns: repeat(10, 40px);
-  gap: 1px;
+  grid-template-columns: repeat(10, 42px);
+  grid-template-rows: repeat(10, 42px);
   margin: 2em;
   border: 2px solid black;
 }
@@ -10,8 +10,28 @@
   width: 40px;
   height: 40px;
   background-color: lightblue;
+  --ship-border: 2px solid gray;
 }
 
-.cell.ship {
+.ship {
+  width: 36px;
+  height: 36px;
   background-color: blue;
+}
+
+.ship.vertical.head {
+  border: var(--ship-border);
+  height: 40px;
+  border-bottom: none;
+}
+
+.ship.vertical.middle {
+  border-left: var(--ship-border);
+  border-right: var(--ship-border);
+}
+
+.ship.vertical.tail {
+  border: var(--ship-border);
+  height: 39px;
+  border-top: none;
 }
