@@ -1,5 +1,12 @@
 import createShip from './ship';
 
+const ShipSegmentType = {
+  STAND_ALONE: 0,
+  HEAD: 1,
+  MIDDLE: 2,
+  TAIL: 3,
+};
+
 const createGameboard = () => {
   const ROW_LENGTH = 10;
   const COLUMN_LENGTH = 10;
@@ -31,16 +38,28 @@ const createGameboard = () => {
     }
     return true;
   };
-
   const placeShipAt = (coordinates, vertical, length) => {
     const ship = createShip(length);
-    let [x, y] = coordinatesToIndices(coordinates);
+    const [headX, headY] = coordinatesToIndices(coordinates);
+    let x = headX;
+    let y = headY;
     if (!shipCanBePlacedAt(x, y, ship, vertical)) {
       throw new Error("Ships can't overlap");
     }
     shipCoordinatesList.push([x, y]);
     for (let i = 0; i < ship.getLength(); ++i) {
-      grid[x][y] = ship;
+      const info = {
+        isVertical: vertical,
+        type:
+          ship.getLength() === 1
+            ? ShipSegmentType.STAND_ALONE
+            : x === headX && y === headY
+              ? ShipSegmentType.HEAD
+              : i === ship.getLength() - 1
+                ? ShipSegmentType.TAIL
+                : ShipSegmentType.MIDDLE,
+      };
+      grid[x][y] = [ship, info];
       if (vertical) ++x;
       else ++y;
     }
@@ -60,12 +79,12 @@ const createGameboard = () => {
       missedAttackCoordinatesList.push(coordinates);
       return;
     }
-    grid[x][y].takeHit();
+    grid[x][y][0].takeHit();
   };
   const allShipsHaveSunk = () => {
     for (let i = 0; i < shipCoordinatesList.length; ++i) {
       const [x, y] = shipCoordinatesList[i];
-      if (!grid[x][y].hasSunk()) return false;
+      if (!grid[x][y][0].hasSunk()) return false;
     }
     return true;
   };
@@ -77,7 +96,8 @@ const createGameboard = () => {
     receiveAttack,
     allShipsHaveSunk,
     getMissedAttackCoordinatesList,
+    grid,
   };
 };
 
-export default createGameboard;
+export { createGameboard, ShipSegmentType };

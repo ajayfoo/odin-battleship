@@ -1,4 +1,4 @@
-import createGameboard from '../src/models/gameboard';
+import { createGameboard, ShipSegmentType } from '../src/models/gameboard';
 
 test('Sink one ships', () => {
   const gameboard = createGameboard();
@@ -64,4 +64,22 @@ test('Get all missed attack coordinates', () => {
 test('Get size', () => {
   const gameboard = createGameboard();
   expect(gameboard.getSize()).toStrictEqual([10, 10]);
+});
+
+test('Get ship info from the cell', () => {
+  const gameboard = createGameboard();
+  gameboard.placeShipAt([1, 'A'], false, 2);
+  gameboard.placeShipAt([2, 'A'], true, 1);
+  expect(gameboard.grid[0][0][1]).toStrictEqual({
+    isVertical: false,
+    type: ShipSegmentType.HEAD,
+  });
+  expect(gameboard.grid[0][1][1]).toStrictEqual({
+    isVertical: false,
+    type: ShipSegmentType.TAIL,
+  });
+  expect(gameboard.grid[1][0][1]).toStrictEqual({
+    isVertical: true,
+    type: ShipSegmentType.STAND_ALONE,
+  });
 });
