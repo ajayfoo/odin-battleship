@@ -1,4 +1,6 @@
-const createGameStatsView = (player, gameboardModel, eventListeners) => {
+import './style.css';
+
+const createGameStatsView = (player, gameboardModel) => {
   const view = document.createElement('div');
   view.classList.add('game-stats');
 
