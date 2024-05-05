@@ -6,6 +6,7 @@ const createPlayerView = (model, gameboardController) => {
   const gameStatsView = createGameStatsView(
     model,
     gameboardController.getModel(),
+    model.isMachine,
   );
 
   view.append(gameboardController.getView(), gameStatsView);
