@@ -3,7 +3,7 @@ import createGameboardController from './gameboard';
 import createPlayer from '../models/player';
 
 const createPlayerController = (name, isMachine) => {
-  const gameboard = createGameboardController();
+  const gameboard = createGameboardController(isMachine);
   const model = createPlayer(name, isMachine);
   const view = createPlayerView(model, gameboard);
   const getModel = () => model;

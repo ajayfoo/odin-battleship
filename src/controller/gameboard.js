@@ -15,9 +15,9 @@ const predeterminedGameboard = () => {
   gameboard.placeShipAt([10, 'F'], false, 5);
   return gameboard;
 };
-const createGameboardController = () => {
+const createGameboardController = (forMachine) => {
   const model = predeterminedGameboard();
-  const view = createGameboardView(model);
+  const view = createGameboardView(model, forMachine);
   const getModel = () => model;
   const getView = () => view;
   return { getModel, getView };
