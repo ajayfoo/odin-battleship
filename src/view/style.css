@@ -20,4 +20,5 @@ body {
 .game-view {
   display: flex;
   justify-content: space-between;
+  background-color: #7fcdff;
 }

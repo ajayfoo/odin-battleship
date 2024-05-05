@@ -1,7 +1,7 @@
 {
-  "name": "vanilla-js-web-project-template",
+  "name": "top-battleship",
   "version": "0.1.0",
-  "description": "A Vanilla JavaScript Web Project Template",
+  "description": "TOP's Battleship project",
   "type": "module",
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
