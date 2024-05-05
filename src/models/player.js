@@ -1,8 +1,6 @@
-import createGameboard from './gameboard';
-
-const createPlayer = () => {
-  const g = createGameboard();
-  return { g };
+const createPlayer = (name) => {
+  const getName = () => name;
+  return { getName };
 };
 
 export default createPlayer;

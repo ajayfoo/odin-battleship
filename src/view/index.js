@@ -1,8 +1,8 @@
 import './style.css';
-const createView = (gameboardController1, gameboardController2) => {
+const createView = (player1View, player2View) => {
   const view = document.createElement('div');
   view.classList.add('game-view');
-  view.append(gameboardController1.view, gameboardController2.view);
+  view.append(player1View, player2View);
   return view;
 };
 

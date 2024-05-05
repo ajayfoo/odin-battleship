@@ -4,4 +4,4 @@ import createController from './controller';
 const controller = createController();
 const mainEle = document.querySelector('body>main');
 
-mainEle.appendChild(controller.view);
+mainEle.appendChild(controller.getView());

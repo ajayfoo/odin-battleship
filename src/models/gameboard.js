@@ -17,6 +17,9 @@ const createGameboard = () => {
   const missedAttackCoordinatesList = [];
   const shipCoordinatesList = [];
   const hitCoordinatesList = [];
+  let numOfShips = 0;
+  const getGrid = () => grid;
+  const getNumberOfShips = () => numOfShips;
   const columnNameToIndex = (alphabet) => {
     const code = alphabet.toUpperCase().charCodeAt(0);
     const maxCode = 'J'.toUpperCase().charCodeAt(0);
@@ -47,6 +50,7 @@ const createGameboard = () => {
       throw new Error("Ships can't overlap");
     }
     shipCoordinatesList.push([x, y]);
+    ++numOfShips;
     for (let i = 0; i < ship.getLength(); ++i) {
       const info = {
         isVertical: vertical,
@@ -79,7 +83,9 @@ const createGameboard = () => {
       missedAttackCoordinatesList.push(coordinates);
       return;
     }
-    grid[x][y][0].takeHit();
+    const ship = grid[x][y][0];
+    ship.takeHit();
+    if (ship.hasSunk()) --numOfShips;
   };
   const allShipsHaveSunk = () => {
     for (let i = 0; i < shipCoordinatesList.length; ++i) {
@@ -96,7 +102,8 @@ const createGameboard = () => {
     receiveAttack,
     allShipsHaveSunk,
     getMissedAttackCoordinatesList,
-    grid,
+    getGrid,
+    getNumberOfShips,
   };
 };
 

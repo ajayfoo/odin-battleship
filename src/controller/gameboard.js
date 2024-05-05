@@ -18,7 +18,9 @@ const predeterminedGameboard = () => {
 const createGameboardController = () => {
   const model = predeterminedGameboard();
   const view = createGameboardView(model);
-  return { view };
+  const getModel = () => model;
+  const getView = () => view;
+  return { getModel, getView };
 };
 
 export default createGameboardController;

@@ -70,16 +70,27 @@ test('Get ship info from the cell', () => {
   const gameboard = createGameboard();
   gameboard.placeShipAt([1, 'A'], false, 2);
   gameboard.placeShipAt([2, 'A'], true, 1);
-  expect(gameboard.grid[0][0][1]).toStrictEqual({
+  const grid = gameboard.getGrid();
+  expect(grid[0][0][1]).toStrictEqual({
     isVertical: false,
     type: ShipSegmentType.HEAD,
   });
-  expect(gameboard.grid[0][1][1]).toStrictEqual({
+  expect(grid[0][1][1]).toStrictEqual({
     isVertical: false,
     type: ShipSegmentType.TAIL,
   });
-  expect(gameboard.grid[1][0][1]).toStrictEqual({
+  expect(grid[1][0][1]).toStrictEqual({
     isVertical: true,
     type: ShipSegmentType.STAND_ALONE,
   });
+});
+
+test('Get number of ships', () => {
+  const gameboard = createGameboard();
+  gameboard.placeShipAt([1, 'A'], false, 2);
+  gameboard.placeShipAt([2, 'A'], true, 1);
+  expect(gameboard.getNumberOfShips()).toBe(2);
+  gameboard.receiveAttack([2, 'A']);
+  gameboard.receiveAttack([3, 'A']);
+  expect(gameboard.getNumberOfShips()).toBe(1);
 });

@@ -34,11 +34,12 @@ const createGameboardView = (gameboard) => {
   const view = document.createElement('div');
   view.classList.add('gameboard');
   const [row, col] = gameboard.getSize();
+  const grid = gameboard.getGrid();
   for (let i = 0; i < row; ++i) {
     for (let j = 0; j < col; ++j) {
-      if (gameboard.grid[i][j] === null) view.appendChild(createCell());
+      if (grid[i][j] === null) view.appendChild(createCell());
       else {
-        const shipInfo = gameboard.grid[i][j][1];
+        const shipInfo = grid[i][j][1];
         view.appendChild(createCell(shipInfo));
       }
     }
