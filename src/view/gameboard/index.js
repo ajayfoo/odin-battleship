@@ -24,19 +24,35 @@ const addShipSegmentStyleClass = (view, shipInfo) => {
     }
   }
 };
-const createCell = (shipInfo, gameboard, forMachine, coordinates) => {
+const createCell = (shipInfo, gameboard, forMachine, indices) => {
   const view = document.createElement('div');
   view.classList.add('cell');
-  if (shipInfo !== null) {
-    view.classList.add('ship');
-    addShipSegmentStyleClass(view, shipInfo);
-  }
   if (forMachine) {
     view.classList.add('for-machine');
+  }
+  if (forMachine && shipInfo === null) {
     view.addEventListener('click', () => {
-      const [x, y] = coordinates;
-      console.log(x, y);
+      view.classList.add('empty-marked');
     });
+  }
+  if (forMachine && shipInfo !== null) {
+    const [x, y] = gameboard.indicesToCoordinates(indices);
+    const [i, j] = indices;
+    const ship = gameboard.getGrid()[i][j][0];
+    view.addEventListener('click', () => {
+      if (ship.hasSunk()) return;
+      console.log([x, y]);
+      const attackSucceeded = gameboard.receiveAttack([x, y]);
+      if (attackSucceeded) view.classList.add('attacked');
+      else console.log('Attack failed');
+      if (ship.hasSunk()) {
+        view.classList.add('sunk');
+      }
+    });
+  }
+  if (!forMachine && shipInfo !== null) {
+    view.classList.add('ship');
+    addShipSegmentStyleClass(view, shipInfo);
   }
   return view;
 };
@@ -50,16 +66,8 @@ const createGameboardView = (gameboard, forMachine) => {
 
   for (let i = 0; i < row; ++i) {
     for (let j = 0; j < col; ++j) {
-      if (forMachine) {
-        view.appendChild(createCell(null, gameboard, forMachine, [i, j]));
-        continue;
-      }
-      if (grid[i][j] === null)
-        view.appendChild(createCell(null, gameboard, forMachine, [i, j]));
-      else {
-        const shipInfo = grid[i][j][1];
-        view.appendChild(createCell(shipInfo, gameboard, forMachine, [i, j]));
-      }
+      const shipInfo = grid[i][j] === null ? null : grid[i][j][1];
+      view.appendChild(createCell(shipInfo, gameboard, forMachine, [i, j]));
     }
   }
 

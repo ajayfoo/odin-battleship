@@ -38,13 +38,17 @@ test('Throw error when placing ship that will over overlap with another ship', (
   );
 });
 
-test('Throw error when hit on the same coordinates', () => {
+test('Return true for a successful attack on ship', () => {
+  const gameboard = createGameboard();
+  gameboard.placeShipAt([1, 'A'], false, 2);
+  expect(gameboard.receiveAttack([1, 'A'])).toBe(true);
+});
+
+test('Return false for a failed attack on ship', () => {
   const gameboard = createGameboard();
   gameboard.placeShipAt([1, 'A'], false, 2);
   gameboard.receiveAttack([1, 'A']);
-  expect(() => gameboard.receiveAttack([1, 'A'])).toThrow(
-    new Error("Can't hit the same location more than once"),
-  );
+  expect(gameboard.receiveAttack([1, 'A'])).toBe(false);
 });
 
 test('Get all missed attack coordinates', () => {

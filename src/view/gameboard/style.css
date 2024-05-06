@@ -24,6 +24,18 @@
   background-color: silver;
 }
 
+.for-machine.attacked {
+  background-color: red;
+}
+
+.for-machine.empty-marked {
+  background-color: greenyellow;
+}
+
+.for-machine.sunk {
+  background-color: black;
+}
+
 .ship.vertical.head {
   border: var(--ship-border);
   height: 40px;

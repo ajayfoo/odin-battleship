@@ -27,12 +27,23 @@ const createGameboard = () => {
     const baseCode = 'A'.toUpperCase().charCodeAt(0);
     return code - baseCode;
   };
+  const indexToColumnName = (index) => {
+    const maxIndex = 9;
+    if (index > maxIndex) throw new Error('Index out of bounds');
+    const baseCode = 'A'.charCodeAt(0);
+    return String.fromCharCode(baseCode + index);
+  };
   const coordinatesToIndices = (coordinates) => {
     const x = coordinates[0] - 1;
     const y = columnNameToIndex(coordinates[1]);
     return [x, y];
   };
 
+  const indicesToCoordinates = (indices) => {
+    const x = indices[0] + 1;
+    const y = indexToColumnName(indices[1]);
+    return [x, y];
+  };
   const shipCanBePlacedAt = (x, y, ship, vertical) => {
     for (let i = 0; i < ship.getLength(); ++i) {
       if (grid[x][y] !== null) return false;
@@ -75,17 +86,18 @@ const createGameboard = () => {
         (place) => place[0] === coordinates[0] && place[1] === coordinates[1],
       )
     ) {
-      throw new Error("Can't hit the same location more than once");
+      return false;
     }
     hitCoordinatesList.push(coordinates);
     const [x, y] = coordinatesToIndices(coordinates);
     if (grid[x][y] === null) {
       missedAttackCoordinatesList.push(coordinates);
-      return;
+      return false;
     }
     const ship = grid[x][y][0];
     ship.takeHit();
     if (ship.hasSunk()) --numOfShips;
+    return true;
   };
   const allShipsHaveSunk = () => {
     for (let i = 0; i < shipCoordinatesList.length; ++i) {
@@ -104,6 +116,7 @@ const createGameboard = () => {
     getMissedAttackCoordinatesList,
     getGrid,
     getNumberOfShips,
+    indicesToCoordinates,
   };
 };
 
