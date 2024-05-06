@@ -13,7 +13,6 @@ const createGameStatsView = (player, gameboardModel, forMachine) => {
 
   const eventType = forMachine ? 'machineShipSunk' : 'shipSunk';
   window.addEventListener(eventType, (event) => {
-    console.log(event);
     numberOfShipsLeftEle.textContent =
       ': ' + event.detail.numOfShips + ' ship(s) left';
   });

@@ -24,9 +24,17 @@ const addShipSegmentStyleClass = (view, shipInfo) => {
     }
   }
 };
-const createCell = (shipInfo, gameboard, forMachine, indices) => {
+const createCell = (
+  gameboardView,
+  shipInfo,
+  gameboard,
+  forMachine,
+  indices,
+) => {
   const view = document.createElement('div');
   view.classList.add('cell');
+  view.setAttribute('data-row', indices[0]);
+  view.setAttribute('data-col', indices[1]);
   if (forMachine) {
     view.classList.add('for-machine');
   }
@@ -41,12 +49,19 @@ const createCell = (shipInfo, gameboard, forMachine, indices) => {
     const ship = gameboard.getGrid()[i][j][0];
     view.addEventListener('click', () => {
       if (ship.hasSunk()) return;
-      console.log([x, y]);
       const attackSucceeded = gameboard.receiveAttack([x, y]);
       if (attackSucceeded) view.classList.add('attacked');
       else console.log('Attack failed');
       if (ship.hasSunk()) {
         view.classList.add('sunk');
+        const occupiedCellsIndices = gameboard.getCellsOccupiedByShip(ship);
+        occupiedCellsIndices.forEach((indices) => {
+          const [row, col] = indices;
+          const targetCell = gameboardView.querySelector(
+            `div[data-row=${row}][data-col=${col}]`,
+          );
+          targetCell.classList.add('sunk');
+        });
       }
     });
   }
@@ -67,7 +82,9 @@ const createGameboardView = (gameboard, forMachine) => {
   for (let i = 0; i < row; ++i) {
     for (let j = 0; j < col; ++j) {
       const shipInfo = grid[i][j] === null ? null : grid[i][j][1];
-      view.appendChild(createCell(shipInfo, gameboard, forMachine, [i, j]));
+      view.appendChild(
+        createCell(view, shipInfo, gameboard, forMachine, [i, j]),
+      );
     }
   }
 

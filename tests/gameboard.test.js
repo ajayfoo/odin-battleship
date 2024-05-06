@@ -98,3 +98,33 @@ test('Get number of ships', () => {
   gameboard.receiveAttack([3, 'A']);
   expect(gameboard.getNumberOfShips()).toBe(1);
 });
+
+test('Get cells occupied by a ship ', () => {
+  const gameboard = createGameboard();
+  const grid = gameboard.getGrid();
+
+  const coordinates1 = [1, 'A'];
+  gameboard.placeShipAt(coordinates1, false, 2);
+  let [i, j] = gameboard.coordinatesToIndices(coordinates1);
+  const expectedCellsOccupied1 = [
+    [i, j],
+    [i, j + 1],
+  ];
+  const ship1 = grid[i][j][0];
+  expect(gameboard.getCellsOccupiedByShip(ship1)).toStrictEqual(
+    expectedCellsOccupied1,
+  );
+
+  const coordinates2 = [2, 'A'];
+  gameboard.placeShipAt(coordinates2, true, 3);
+  [i, j] = gameboard.coordinatesToIndices(coordinates2);
+  const expectedCellsOccupied2 = [
+    [i, j],
+    [i + 1, j],
+    [i + 2, j],
+  ];
+  const ship2 = grid[i][j][0];
+  expect(gameboard.getCellsOccupiedByShip(ship2)).toStrictEqual(
+    expectedCellsOccupied2,
+  );
+});
