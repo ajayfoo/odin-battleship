@@ -7,7 +7,7 @@ const ShipSegmentType = {
   TAIL: 3,
 };
 
-const createGameboard = () => {
+const createGameboard = (forMachine = false) => {
   const ROW_LENGTH = 10;
   const COLUMN_LENGTH = 10;
   const getSize = () => [ROW_LENGTH, COLUMN_LENGTH];
@@ -96,7 +96,17 @@ const createGameboard = () => {
     }
     const ship = grid[x][y][0];
     ship.takeHit();
-    if (ship.hasSunk()) --numOfShips;
+    if (ship.hasSunk()) {
+      --numOfShips;
+      const eventType = forMachine ? 'machineShipSunk' : 'shipSunk';
+      console.log(eventType);
+      const shipSunkEvent = new CustomEvent(eventType, {
+        detail: {
+          numOfShips,
+        },
+      });
+      window.dispatchEvent(shipSunkEvent);
+    }
     return true;
   };
   const allShipsHaveSunk = () => {
