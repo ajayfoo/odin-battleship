@@ -36,13 +36,13 @@ const createController = () => {
         return;
       }
       const [row, col] = randomIndices.pop();
-      gameboard1Model.receiveAttack(
+      const attackSucceeded = gameboard1Model.receiveAttack(
         gameboard1Model.indicesToCoordinates([row, col]),
       );
       const targetCell = gameboard1View.querySelector(
         `div[data-row="${row}"][data-col="${col}"]`,
       );
-      targetCell.style.backgroundColor = 'yellow';
+      targetCell.classList.add(attackSucceeded ? 'attacked' : 'empty-marked');
     });
 
   const view = createView(
