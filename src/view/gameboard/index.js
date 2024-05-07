@@ -103,4 +103,4 @@ const createGameboardView = (gameboard, forMachine) => {
   return view;
 };
 
-export default createGameboardView;
+export { createGameboardView, addShipSegmentStyleClass };

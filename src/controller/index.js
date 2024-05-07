@@ -1,5 +1,6 @@
 import createView from '../view';
 import { createPlayerController } from './player';
+import { addShipSegmentStyleClass } from '../view/gameboard';
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -25,7 +26,11 @@ const createController = () => {
   const gameboard1Model = player1Controller.getGameboardController().getModel();
   const gameboard1View = player1Controller.getGameboardController().getView();
 
-  const randomIndices = getRandomIndices();
+  // const randomIndices = getRandomIndices();
+  const randomIndices = [
+    [0, 0],
+    [0, 1],
+  ];
   const player2Controller = createPlayerController('Machine', true);
   player2Controller
     .getGameboardController()
@@ -42,7 +47,34 @@ const createController = () => {
       const targetCell = gameboard1View.querySelector(
         `div[data-row="${row}"][data-col="${col}"]`,
       );
-      targetCell.classList.add(attackSucceeded ? 'attacked' : 'empty-marked');
+      if (attackSucceeded) {
+        targetCell.classList.add('attacked');
+        const ship = gameboard1Model.getGrid()[row][col][0];
+        if (ship.hasSunk()) {
+          const shipSunkEvent = new CustomEvent('userShipSunk', {
+            detail: {
+              numOfShips: gameboard1Model.getNumberOfShips(),
+            },
+          });
+          player1Controller.getView().dispatchEvent(shipSunkEvent);
+          view.classList.add('sunk');
+          const occupiedCellsIndices =
+            gameboard1Model.getCellsOccupiedByShip(ship);
+          occupiedCellsIndices.forEach((indices) => {
+            console.log(indices);
+            const [row, col] = indices;
+            const occupiedShipInfo = gameboard1Model.getGrid()[row][col][1];
+            const targetCell = gameboard1View.querySelector(
+              `div[data-row="${row}"][data-col="${col}"]`,
+            );
+            addShipSegmentStyleClass(targetCell, occupiedShipInfo);
+            targetCell.classList.add('ship');
+            targetCell.classList.add('sunk');
+          });
+        }
+      } else {
+        targetCell.classList.add('empty-marked');
+      }
     });
 
   const view = createView(

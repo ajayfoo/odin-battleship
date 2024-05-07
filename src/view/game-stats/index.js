@@ -20,7 +20,12 @@ const createGameStatsView = (player, gameboardModel, forMachine) => {
   view.append(playerNameEle);
   view.append(numberOfShipsLeftEle);
 
-  return view;
+  const getView = () => view;
+  const setNumberOfShipsLeft = (numOfShips) => {
+    numberOfShipsLeftEle.textContent = ': ' + numOfShips + ' ship(s) left';
+  };
+
+  return { getView, setNumberOfShipsLeft };
 };
 
 export default createGameStatsView;

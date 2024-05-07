@@ -8,8 +8,11 @@ const createPlayerView = (model, gameboardController) => {
     gameboardController.getModel(),
     model.isMachine,
   );
-
-  view.append(gameboardController.getView(), gameStatsView);
+  const eventType = model.isMachine ? 'machineShipSunk' : 'userShipSunk';
+  view.addEventListener(eventType, (event) => {
+    gameStatsView.setNumberOfShipsLeft(event.detail.numOfShips);
+  });
+  view.append(gameboardController.getView(), gameStatsView.getView());
   return view;
 };
 
