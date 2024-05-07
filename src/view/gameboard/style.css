@@ -71,3 +71,12 @@
   width: 38px;
   border-left: none;
 }
+
+.for-machine.ship.vertical.head,
+.for-machine.ship.vertical.middle,
+.for-machine.ship.vertical.tail,
+.for-machine.ship.horizontal.head,
+.for-machine.ship.horizontal.middle,
+.for-machine.ship.horizontal.tail {
+  border-color: #944e4e;
+}

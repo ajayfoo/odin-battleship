@@ -1,25 +1,25 @@
 import { ShipSegmentType } from '../../models/gameboard';
 import './style.css';
 
-const addShipSegmentStyleClass = (view, shipInfo) => {
+const addShipSegmentStyleClass = (cell, shipInfo) => {
   if (shipInfo.type !== ShipSegmentType.STAND_ALONE) {
-    view.classList.add(shipInfo.isVertical ? 'vertical' : 'horizontal');
+    cell.classList.add(shipInfo.isVertical ? 'vertical' : 'horizontal');
   }
   switch (shipInfo.type) {
     case ShipSegmentType.HEAD: {
-      view.classList.add('head');
+      cell.classList.add('head');
       break;
     }
     case ShipSegmentType.TAIL: {
-      view.classList.add('tail');
+      cell.classList.add('tail');
       break;
     }
     case ShipSegmentType.MIDDLE: {
-      view.classList.add('middle');
+      cell.classList.add('middle');
       break;
     }
     default: {
-      view.classList.add('stand-alone');
+      cell.classList.add('stand-alone');
       break;
     }
   }
@@ -57,9 +57,12 @@ const createCell = (
         const occupiedCellsIndices = gameboard.getCellsOccupiedByShip(ship);
         occupiedCellsIndices.forEach((indices) => {
           const [row, col] = indices;
+          const occupiedShipInfo = gameboard.getGrid()[row][col][1];
           const targetCell = gameboardView.querySelector(
             `div[data-row="${row}"][data-col="${col}"]`,
           );
+          addShipSegmentStyleClass(targetCell, occupiedShipInfo);
+          targetCell.classList.add('ship');
           targetCell.classList.add('sunk');
         });
       }
