@@ -1,4 +1,4 @@
-import { createGameboardView } from '../view/gameboard';
+import { createGameboardView } from '../views/gameboard';
 import { createGameboard } from '../models/gameboard';
 
 const predeterminedGameboard = () => {

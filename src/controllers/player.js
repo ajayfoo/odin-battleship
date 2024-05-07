@@ -1,4 +1,4 @@
-import createPlayerView from '../view/player';
+import createPlayerView from '../views/player';
 import createGameboardController from './gameboard';
 import createPlayer from '../models/player';
 

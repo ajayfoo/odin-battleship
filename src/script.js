@@ -1,5 +1,5 @@
 import './style/base.css';
-import createController from './controller';
+import createController from './controllers';
 
 const controller = createController();
 const mainEle = document.querySelector('body>main');

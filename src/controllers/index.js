@@ -1,6 +1,6 @@
-import createView from '../view';
+import createView from '../views';
 import { createPlayerController } from './player';
-import { addShipSegmentStyleClass } from '../view/gameboard';
+import { addShipSegmentStyleClass } from '../views/gameboard';
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -26,11 +26,11 @@ const createController = () => {
   const gameboard1Model = player1Controller.getGameboardController().getModel();
   const gameboard1View = player1Controller.getGameboardController().getView();
 
-  // const randomIndices = getRandomIndices();
-  const randomIndices = [
-    [0, 0],
-    [0, 1],
-  ];
+  const randomIndices = getRandomIndices();
+  // const randomIndices = [
+  //   [0, 0],
+  //   [0, 1],
+  // ];
   const player2Controller = createPlayerController('Machine', true);
   player2Controller
     .getGameboardController()

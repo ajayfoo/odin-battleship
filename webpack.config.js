@@ -6,10 +6,7 @@ const isProduction = process.env.NODE_ENV == 'production';
 const stylesHandler = 'style-loader';
 
 const config = {
-  entry: {
-    app: './src/index.js',
-    page2: './src/page2/index.js',
-  },
+  entry: './src/script.js',
   devtool: 'inline-source-map',
   output: {
     path: resolve(import.meta.dirname, 'dist'),
@@ -21,14 +18,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'src/templates/index.html',
-      chunks: ['app'],
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'page2.html',
-      template: 'src/templates/page2.html',
-      chunks: ['page2'],
+      template: 'src/index.html',
     }),
   ],
   module: {
