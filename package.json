@@ -11,9 +11,6 @@
     "watch": "webpack --watch",
     "serve": "webpack serve"
   },
-  "keywords": [
-    "template"
-  ],
   "author": "Ajay K",
   "license": "MIT",
   "devDependencies": {
