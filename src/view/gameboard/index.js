@@ -58,7 +58,7 @@ const createCell = (
         occupiedCellsIndices.forEach((indices) => {
           const [row, col] = indices;
           const targetCell = gameboardView.querySelector(
-            `div[data-row=${row}][data-col=${col}]`,
+            `div[data-row="${row}"][data-col="${col}"]`,
           );
           targetCell.classList.add('sunk');
         });
