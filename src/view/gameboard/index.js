@@ -53,6 +53,12 @@ const createCell = (
       if (attackSucceeded) view.classList.add('attacked');
       else console.log('Attack failed');
       if (ship.hasSunk()) {
+        const shipSunkEvent = new CustomEvent('machineShipSunk', {
+          detail: {
+            numOfShips: gameboard.getNumberOfShips(),
+          },
+        });
+        window.dispatchEvent(shipSunkEvent);
         view.classList.add('sunk');
         const occupiedCellsIndices = gameboard.getCellsOccupiedByShip(ship);
         occupiedCellsIndices.forEach((indices) => {
