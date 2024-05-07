@@ -37,6 +37,10 @@ const createCell = (
   view.setAttribute('data-col', indices[1]);
   if (forMachine) {
     view.classList.add('for-machine');
+    view.addEventListener('click', () => {
+      const userPlayedEvent = new CustomEvent('userPlayed');
+      gameboardView.dispatchEvent(userPlayedEvent);
+    });
   }
   if (forMachine && shipInfo === null) {
     view.addEventListener('click', () => {
@@ -91,9 +95,8 @@ const createGameboardView = (gameboard, forMachine) => {
   for (let i = 0; i < row; ++i) {
     for (let j = 0; j < col; ++j) {
       const shipInfo = grid[i][j] === null ? null : grid[i][j][1];
-      view.appendChild(
-        createCell(view, shipInfo, gameboard, forMachine, [i, j]),
-      );
+      const cell = createCell(view, shipInfo, gameboard, forMachine, [i, j]);
+      view.appendChild(cell);
     }
   }
 
