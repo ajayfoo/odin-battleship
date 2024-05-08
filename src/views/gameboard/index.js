@@ -26,13 +26,16 @@ const applyShipSegmentStyle = (cell, shipInfo) => {
   }
 };
 
-const dispatchShipSunkEvent = (gameboard) => {
-  const shipSunkEvent = new CustomEvent('machineShipSunk', {
-    detail: {
-      numOfShips: gameboard.getNumberOfShips(),
+const dispatchShipSunkEvent = (gameboard, view, forMachine = false) => {
+  const shipSunkEvent = new CustomEvent(
+    forMachine ? 'machineShipSunk' : 'userShipSunk',
+    {
+      detail: {
+        numOfShips: gameboard.getNumberOfShips(),
+      },
     },
-  });
-  window.dispatchEvent(shipSunkEvent);
+  );
+  view.dispatchEvent(shipSunkEvent);
 };
 
 const applyCellStyleBasedOnAttackResult = (cell, attackResult) => {
@@ -86,7 +89,7 @@ const setClickEventListenerForShipCell = (
     const [i, j] = indexRowCol;
     const ship = gameboard.getGrid()[i][j][0];
     if (ship.hasSunk()) {
-      dispatchShipSunkEvent(gameboard);
+      dispatchShipSunkEvent(gameboard, window, true);
       applySunkShipStyle(gameboard, gameboardView, ship);
     }
   });
@@ -132,4 +135,5 @@ export {
   applyShipSegmentStyle,
   applyCellStyleBasedOnAttackResult,
   applySunkShipStyle,
+  dispatchShipSunkEvent,
 };

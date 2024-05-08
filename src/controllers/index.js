@@ -3,6 +3,7 @@ import { createPlayerController } from './player';
 import {
   applyCellStyleBasedOnAttackResult,
   applySunkShipStyle,
+  dispatchShipSunkEvent,
 } from '../views/gameboard';
 import { AttackResult } from '../utils';
 
@@ -22,15 +23,6 @@ const getRandomIndexRowCols = () => {
   }
   shuffleArray(indexRowCols);
   return indexRowCols;
-};
-
-const dispatchShipSunkEvent = (gameboard, view) => {
-  const shipSunkEvent = new CustomEvent('userShipSunk', {
-    detail: {
-      numOfShips: gameboard.getNumberOfShips(),
-    },
-  });
-  view.dispatchEvent(shipSunkEvent);
 };
 
 const createController = () => {
