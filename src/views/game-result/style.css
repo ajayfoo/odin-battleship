@@ -1,10 +1,24 @@
 .game-result {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
   background-color: bisque;
   padding: 2em 0;
+  justify-items: center;
 }
 
 .game-result > p:first-child {
   font-size: 1.5rem;
   font-weight: 900;
   text-align: center;
+}
+
+.game-result > button:last-child {
+  font-size: 1.1rem;
+  border-radius: 10px;
+  border: none;
+  background-color: rebeccapurple;
+  color: aliceblue;
+  padding: 0.3em 1em;
+  box-shadow: 0 0 10px 1px rgb(0 0 0/0.3);
+  cursor: pointer;
 }

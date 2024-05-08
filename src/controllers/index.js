@@ -61,6 +61,12 @@ const createController = () => {
         applySunkShipStyle(gameboard1Model, gameboard1View, ship);
       }
     });
+
+  window.addEventListener('newGame', () => {
+    player1Controller.getView().classList.remove('gameOver');
+    player2Controller.getView().classList.remove('gameOver');
+  });
+
   window.addEventListener('gameOver', () => {
     player1Controller.getView().classList.add('gameOver');
     player2Controller.getView().classList.add('gameOver');

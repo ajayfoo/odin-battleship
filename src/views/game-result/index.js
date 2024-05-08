@@ -3,13 +3,23 @@ import './style.css';
 const createGameResult = () => {
   const view = document.createElement('div');
   view.classList.add('game-result');
+
   const resultEle = document.createElement('p');
   resultEle.textContent = 'Game Result yet to be determined';
+
   window.addEventListener('userWon', () => {
     resultEle.textContent = 'User Has Won!';
   });
 
-  view.append(resultEle);
+  const newGameBtn = document.createElement('button');
+  newGameBtn.setAttribute('type', 'button');
+  newGameBtn.textContent = 'New Game';
+  newGameBtn.addEventListener('click', () => {
+    const newGameEvent = new CustomEvent('newGame');
+    window.dispatchEvent(newGameEvent);
+  });
+
+  view.append(resultEle, newGameBtn);
   return view;
 };
 
