@@ -1,4 +1,4 @@
-import './style/base.css';
+import './style.css';
 import createController from './controllers';
 
 const controller = createController();
