@@ -40,7 +40,7 @@ const createGameboard = () => {
     return [x, y];
   };
 
-  const indicesToCoordinates = (indices) => {
+  const indexRowColToCoordinates = (indices) => {
     const x = indices[0] + 1;
     const y = indexToColumnName(indices[1]);
     return [x, y];
@@ -127,7 +127,7 @@ const createGameboard = () => {
     getGrid,
     getNumberOfShips,
     coordinatesToIndices,
-    indicesToCoordinates,
+    indexRowColToCoordinates,
     getCellsOccupiedByShip,
   };
 };

@@ -35,7 +35,7 @@ const dispatchShipSunkEvent = (gameboard) => {
   window.dispatchEvent(shipSunkEvent);
 };
 
-const setCellStyleClassBasedOnAttackResult = (cell, attackResult) => {
+const applyCellClassBasedOnAttackResult = (cell, attackResult) => {
   switch (attackResult) {
     case AttackResult.FAILED: {
       cell.classList.add('empty-marked');
@@ -55,6 +55,20 @@ const setCellStyleClassBasedOnAttackResult = (cell, attackResult) => {
   }
 };
 
+const applySunkShipStyle = (gameboard, gameboardView, ship) => {
+  const occupiedCellsRowCols = gameboard.getCellsOccupiedByShip(ship);
+  occupiedCellsRowCols.forEach((rowCol) => {
+    const [row, col] = rowCol;
+    const occupiedShipInfo = gameboard.getGrid()[row][col][1];
+    const targetCell = gameboardView.querySelector(
+      `div[data-row="${row}"][data-col="${col}"]`,
+    );
+    addShipSegmentStyleClass(targetCell, occupiedShipInfo);
+    targetCell.classList.add('ship');
+    targetCell.classList.add('sunk');
+  });
+};
+
 const setClickEventListenerForShipCell = (
   cell,
   gameboard,
@@ -62,28 +76,18 @@ const setClickEventListenerForShipCell = (
   indexRowCol,
 ) => {
   cell.addEventListener('click', () => {
-    const [x, y] = gameboard.indicesToCoordinates(indexRowCol);
+    const [x, y] = gameboard.indexRowColToCoordinates(indexRowCol);
     const attackResult = gameboard.receiveAttack([x, y]);
-    setCellStyleClassBasedOnAttackResult(cell, attackResult);
-    if (attackResult !== AttackResult.SUCCESSFUL) return;
-    const [i, j] = indexRowCol;
-    const ship = gameboard.getGrid()[i][j][0];
+    applyCellClassBasedOnAttackResult(cell, attackResult);
+    if (attackResult === AttackResult.REDUNDANT) return;
     const userPlayedEvent = new CustomEvent('userPlayed');
     gameboardView.dispatchEvent(userPlayedEvent);
+    if (attackResult === AttackResult.FAILED) return;
+    const [i, j] = indexRowCol;
+    const ship = gameboard.getGrid()[i][j][0];
     if (ship.hasSunk()) {
       dispatchShipSunkEvent(gameboard);
-      cell.classList.add('sunk');
-      const occupiedCellsRowCols = gameboard.getCellsOccupiedByShip(ship);
-      occupiedCellsRowCols.forEach((rowCol) => {
-        const [row, col] = rowCol;
-        const occupiedShipInfo = gameboard.getGrid()[row][col][1];
-        const targetCell = gameboardView.querySelector(
-          `div[data-row="${row}"][data-col="${col}"]`,
-        );
-        addShipSegmentStyleClass(targetCell, occupiedShipInfo);
-        targetCell.classList.add('ship');
-        targetCell.classList.add('sunk');
-      });
+      applySunkShipStyle(gameboard, gameboardView, ship);
     }
   });
 };
@@ -126,5 +130,6 @@ const createGameboardView = (gameboard, forMachine) => {
 export {
   createGameboardView,
   addShipSegmentStyleClass,
-  setCellStyleClassBasedOnAttackResult,
+  applyCellClassBasedOnAttackResult,
+  applySunkShipStyle,
 };
