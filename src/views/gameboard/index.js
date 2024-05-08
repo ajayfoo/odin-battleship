@@ -24,17 +24,53 @@ const addShipSegmentStyleClass = (cell, shipInfo) => {
     }
   }
 };
-const createCell = (
-  gameboardView,
-  shipInfo,
+
+const dispatchShipSunkEvent = (gameboard) => {
+  const shipSunkEvent = new CustomEvent('machineShipSunk', {
+    detail: {
+      numOfShips: gameboard.getNumberOfShips(),
+    },
+  });
+  window.dispatchEvent(shipSunkEvent);
+};
+
+const setClickEventListenerForShipCell = (
+  cell,
   gameboard,
-  forMachine,
-  indices,
+  gameboardView,
+  indexRowCol,
 ) => {
+  const [x, y] = gameboard.indicesToCoordinates(indexRowCol);
+  const [i, j] = indexRowCol;
+  const ship = gameboard.getGrid()[i][j][0];
+  cell.addEventListener('click', () => {
+    if (ship.hasSunk()) return;
+    const attackSucceeded = gameboard.receiveAttack([x, y]);
+    if (attackSucceeded) cell.classList.add('attacked');
+    else console.log('Attack failed');
+    if (ship.hasSunk()) {
+      dispatchShipSunkEvent(gameboard);
+      cell.classList.add('sunk');
+      const occupiedCellsIndexRowCols = gameboard.getCellsOccupiedByShip(ship);
+      occupiedCellsIndexRowCols.forEach((rowCol) => {
+        const [row, col] = rowCol;
+        const occupiedShipInfo = gameboard.getGrid()[row][col][1];
+        const targetCell = gameboardView.querySelector(
+          `div[data-row="${row}"][data-col="${col}"]`,
+        );
+        addShipSegmentStyleClass(targetCell, occupiedShipInfo);
+        targetCell.classList.add('ship');
+        targetCell.classList.add('sunk');
+      });
+    }
+  });
+};
+
+const createCell = (gameboardView, shipInfo, gameboard, forMachine, rowCol) => {
   const view = document.createElement('div');
   view.classList.add('cell');
-  view.setAttribute('data-row', indices[0]);
-  view.setAttribute('data-col', indices[1]);
+  view.setAttribute('data-row', rowCol[0]);
+  view.setAttribute('data-col', rowCol[1]);
   if (forMachine) {
     view.classList.add('for-machine');
     view.addEventListener('click', () => {
@@ -48,35 +84,7 @@ const createCell = (
     });
   }
   if (forMachine && shipInfo !== null) {
-    const [x, y] = gameboard.indicesToCoordinates(indices);
-    const [i, j] = indices;
-    const ship = gameboard.getGrid()[i][j][0];
-    view.addEventListener('click', () => {
-      if (ship.hasSunk()) return;
-      const attackSucceeded = gameboard.receiveAttack([x, y]);
-      if (attackSucceeded) view.classList.add('attacked');
-      else console.log('Attack failed');
-      if (ship.hasSunk()) {
-        const shipSunkEvent = new CustomEvent('machineShipSunk', {
-          detail: {
-            numOfShips: gameboard.getNumberOfShips(),
-          },
-        });
-        window.dispatchEvent(shipSunkEvent);
-        view.classList.add('sunk');
-        const occupiedCellsIndices = gameboard.getCellsOccupiedByShip(ship);
-        occupiedCellsIndices.forEach((indices) => {
-          const [row, col] = indices;
-          const occupiedShipInfo = gameboard.getGrid()[row][col][1];
-          const targetCell = gameboardView.querySelector(
-            `div[data-row="${row}"][data-col="${col}"]`,
-          );
-          addShipSegmentStyleClass(targetCell, occupiedShipInfo);
-          targetCell.classList.add('ship');
-          targetCell.classList.add('sunk');
-        });
-      }
-    });
+    setClickEventListenerForShipCell(view, gameboard, gameboardView, rowCol);
   }
   if (!forMachine && shipInfo !== null) {
     view.classList.add('ship');
@@ -84,6 +92,7 @@ const createCell = (
   }
   return view;
 };
+
 const createGameboardView = (gameboard, forMachine) => {
   const view = document.createElement('div');
   view.classList.add('gameboard');
