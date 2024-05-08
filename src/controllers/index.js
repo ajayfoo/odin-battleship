@@ -1,7 +1,7 @@
 import createView from '../views';
 import { createPlayerController } from './player';
 import {
-  applyCellClassBasedOnAttackResult,
+  applyCellStyleBasedOnAttackResult,
   applySunkShipStyle,
 } from '../views/gameboard';
 import { AttackResult } from '../utils';
@@ -61,7 +61,7 @@ const createController = () => {
       const targetCell = gameboard1View.querySelector(
         `div[data-row="${row}"][data-col="${col}"]`,
       );
-      applyCellClassBasedOnAttackResult(targetCell, attackResult);
+      applyCellStyleBasedOnAttackResult(targetCell, attackResult);
       if (attackResult !== AttackResult.SUCCESSFUL) return;
       const ship = gameboard1Model.getGrid()[row][col][0];
       if (ship.hasSunk()) {

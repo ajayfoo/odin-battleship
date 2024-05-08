@@ -2,7 +2,7 @@ import { ShipSegmentType } from '../../models/gameboard';
 import { AttackResult } from '../../utils';
 import './style.css';
 
-const addShipSegmentStyleClass = (cell, shipInfo) => {
+const applyShipSegmentStyle = (cell, shipInfo) => {
   if (shipInfo.type !== ShipSegmentType.STAND_ALONE) {
     cell.classList.add(shipInfo.isVertical ? 'vertical' : 'horizontal');
   }
@@ -35,7 +35,7 @@ const dispatchShipSunkEvent = (gameboard) => {
   window.dispatchEvent(shipSunkEvent);
 };
 
-const applyCellClassBasedOnAttackResult = (cell, attackResult) => {
+const applyCellStyleBasedOnAttackResult = (cell, attackResult) => {
   switch (attackResult) {
     case AttackResult.FAILED: {
       cell.classList.add('empty-marked');
@@ -63,7 +63,7 @@ const applySunkShipStyle = (gameboard, gameboardView, ship) => {
     const targetCell = gameboardView.querySelector(
       `div[data-row="${row}"][data-col="${col}"]`,
     );
-    addShipSegmentStyleClass(targetCell, occupiedShipInfo);
+    applyShipSegmentStyle(targetCell, occupiedShipInfo);
     targetCell.classList.add('ship');
     targetCell.classList.add('sunk');
   });
@@ -78,7 +78,7 @@ const setClickEventListenerForShipCell = (
   cell.addEventListener('click', () => {
     const [x, y] = gameboard.indexRowColToCoordinates(indexRowCol);
     const attackResult = gameboard.receiveAttack([x, y]);
-    applyCellClassBasedOnAttackResult(cell, attackResult);
+    applyCellStyleBasedOnAttackResult(cell, attackResult);
     if (attackResult === AttackResult.REDUNDANT) return;
     const userPlayedEvent = new CustomEvent('userPlayed');
     gameboardView.dispatchEvent(userPlayedEvent);
@@ -103,7 +103,7 @@ const createCell = (gameboardView, shipInfo, gameboard, forMachine, rowCol) => {
   }
   if (!forMachine && shipInfo !== null) {
     view.classList.add('ship');
-    addShipSegmentStyleClass(view, shipInfo);
+    applyShipSegmentStyle(view, shipInfo);
   }
   return view;
 };
@@ -129,7 +129,7 @@ const createGameboardView = (gameboard, forMachine) => {
 
 export {
   createGameboardView,
-  addShipSegmentStyleClass,
-  applyCellClassBasedOnAttackResult,
+  applyShipSegmentStyle,
+  applyCellStyleBasedOnAttackResult,
   applySunkShipStyle,
 };
