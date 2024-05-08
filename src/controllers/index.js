@@ -61,7 +61,10 @@ const createController = () => {
         applySunkShipStyle(gameboard1Model, gameboard1View, ship);
       }
     });
-
+  window.addEventListener('gameOver', () => {
+    player1Controller.getView().classList.add('gameOver');
+    player2Controller.getView().classList.add('gameOver');
+  });
   const view = createView(
     player1Controller.getView(),
     player2Controller.getView(),

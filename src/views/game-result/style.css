@@ -1,0 +1,10 @@
+.game-result {
+  background-color: bisque;
+  padding: 2em 0;
+}
+
+.game-result > p:first-child {
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-align: center;
+}

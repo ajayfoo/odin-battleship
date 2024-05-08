@@ -91,6 +91,12 @@ const setClickEventListenerForShipCell = (
     if (ship.hasSunk()) {
       dispatchShipSunkEvent(gameboard, window, true);
       applySunkShipStyle(gameboard, gameboardView, ship);
+      if (gameboard.getNumberOfShips() === 0) {
+        const gameOverEvent = new CustomEvent('gameOver');
+        window.dispatchEvent(gameOverEvent);
+        const playerWonEvent = new CustomEvent('userWon');
+        window.dispatchEvent(playerWonEvent);
+      }
     }
   });
 };
@@ -114,11 +120,8 @@ const createCell = (gameboardView, shipInfo, gameboard, forMachine, rowCol) => {
 const createGameboardView = (gameboard, forMachine) => {
   const view = document.createElement('div');
   view.classList.add('gameboard');
-
   const [row, col] = gameboard.getSize();
-
   const grid = gameboard.getGrid();
-
   for (let i = 0; i < row; ++i) {
     for (let j = 0; j < col; ++j) {
       const shipInfo = grid[i][j] === null ? null : grid[i][j][1];
@@ -126,7 +129,6 @@ const createGameboardView = (gameboard, forMachine) => {
       view.appendChild(cell);
     }
   }
-
   return view;
 };
 

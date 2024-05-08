@@ -1,8 +1,13 @@
+import { createGameResult } from './game-result';
 import './style.css';
 const createView = (player1View, player2View) => {
   const view = document.createElement('div');
-  view.classList.add('game-view');
-  view.append(player1View, player2View);
+  const gameView = document.createElement('div');
+  gameView.classList.add('game-view');
+  gameView.append(player1View, player2View);
+
+  const gameResult = createGameResult();
+  view.append(gameView, gameResult);
   return view;
 };
 
