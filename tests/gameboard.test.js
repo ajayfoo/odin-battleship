@@ -1,4 +1,5 @@
 import { createGameboard, ShipSegmentType } from '../src/models/gameboard';
+import { AttackResult } from '../src/utils';
 
 test('Sink one ships', () => {
   const gameboard = createGameboard();
@@ -38,17 +39,22 @@ test('Throw error when placing ship that will over overlap with another ship', (
   );
 });
 
-test('Return true for a successful attack on ship', () => {
+test('Return FAILED AttackResult result for a failed attack on ship', () => {
   const gameboard = createGameboard();
-  gameboard.placeShipAt([1, 'A'], false, 2);
-  expect(gameboard.receiveAttack([1, 'A'])).toBe(true);
+  expect(gameboard.receiveAttack([1, 'A'])).toBe(AttackResult.FAILED);
 });
 
-test('Return false for a failed attack on ship', () => {
+test('Return SUCCESSFUL AttackResult result for a successful attack on ship', () => {
+  const gameboard = createGameboard();
+  gameboard.placeShipAt([1, 'A'], false, 2);
+  expect(gameboard.receiveAttack([1, 'A'])).toBe(AttackResult.SUCCESSFUL);
+});
+
+test('Return REDUNDANT AttackResult result for a successful attack on ship', () => {
   const gameboard = createGameboard();
   gameboard.placeShipAt([1, 'A'], false, 2);
   gameboard.receiveAttack([1, 'A']);
-  expect(gameboard.receiveAttack([1, 'A'])).toBe(false);
+  expect(gameboard.receiveAttack([1, 'A'])).toBe(AttackResult.REDUNDANT);
 });
 
 test('Get all missed attack coordinates', () => {

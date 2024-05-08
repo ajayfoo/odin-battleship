@@ -1,3 +1,4 @@
+import { AttackResult } from '../utils';
 import createShip from './ship';
 
 const ShipSegmentType = {
@@ -86,18 +87,18 @@ const createGameboard = () => {
         (place) => place[0] === coordinates[0] && place[1] === coordinates[1],
       )
     ) {
-      return false;
+      return AttackResult.REDUNDANT;
     }
     hitCoordinatesList.push(coordinates);
     const [x, y] = coordinatesToIndices(coordinates);
     if (grid[x][y] === null) {
       missedAttackCoordinatesList.push(coordinates);
-      return false;
+      return AttackResult.FAILED;
     }
     const ship = grid[x][y][0];
     ship.takeHit();
     if (ship.hasSunk()) --numOfShips;
-    return true;
+    return AttackResult.SUCCESSFUL;
   };
   const allShipsHaveSunk = () => {
     for (let i = 0; i < shipCoordinatesList.length; ++i) {

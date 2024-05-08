@@ -1,4 +1,5 @@
 import { ShipSegmentType } from '../../models/gameboard';
+import { AttackResult } from '../../utils';
 import './style.css';
 
 const addShipSegmentStyleClass = (cell, shipInfo) => {
@@ -34,20 +35,42 @@ const dispatchShipSunkEvent = (gameboard) => {
   window.dispatchEvent(shipSunkEvent);
 };
 
+const setCellStyleClassBasedOnAttackResult = (cell, attackResult) => {
+  switch (attackResult) {
+    case AttackResult.FAILED: {
+      cell.classList.add('empty-marked');
+      break;
+    }
+    case AttackResult.SUCCESSFUL: {
+      cell.classList.add('attacked');
+      break;
+    }
+    case AttackResult.REDUNDANT: {
+      alert("Can't Attack the location twice");
+      break;
+    }
+    default: {
+      alert('Something went wrong! Bad AttackResult');
+      break;
+    }
+  }
+};
+
 const setClickEventListenerForShipCell = (
   cell,
   gameboard,
   gameboardView,
   indexRowCol,
 ) => {
-  const [x, y] = gameboard.indicesToCoordinates(indexRowCol);
-  const [i, j] = indexRowCol;
-  const ship = gameboard.getGrid()[i][j][0];
   cell.addEventListener('click', () => {
-    if (ship.hasSunk()) return;
-    const attackSucceeded = gameboard.receiveAttack([x, y]);
-    if (attackSucceeded) cell.classList.add('attacked');
-    else console.log('Attack failed');
+    const [x, y] = gameboard.indicesToCoordinates(indexRowCol);
+    const attackResult = gameboard.receiveAttack([x, y]);
+    setCellStyleClassBasedOnAttackResult(cell, attackResult);
+    if (attackResult !== AttackResult.SUCCESSFUL) return;
+    const [i, j] = indexRowCol;
+    const ship = gameboard.getGrid()[i][j][0];
+    const userPlayedEvent = new CustomEvent('userPlayed');
+    gameboardView.dispatchEvent(userPlayedEvent);
     if (ship.hasSunk()) {
       dispatchShipSunkEvent(gameboard);
       cell.classList.add('sunk');
@@ -73,19 +96,16 @@ const createCell = (gameboardView, shipInfo, gameboard, forMachine, rowCol) => {
   view.setAttribute('data-col', rowCol[1]);
   if (forMachine) {
     view.classList.add('for-machine');
-    view.addEventListener('click', () => {
-      const userPlayedEvent = new CustomEvent('userPlayed');
-      gameboardView.dispatchEvent(userPlayedEvent);
-    });
-  }
-  if (forMachine && shipInfo === null) {
-    view.addEventListener('click', () => {
-      view.classList.add('empty-marked');
-    });
-  }
-  if (forMachine && shipInfo !== null) {
     setClickEventListenerForShipCell(view, gameboard, gameboardView, rowCol);
   }
+  // if (forMachine && shipInfo === null) {
+  //   view.addEventListener('click', () => {
+  //     view.classList.add('empty-marked');
+  //   });
+  // }
+  // if (forMachine && shipInfo !== null) {
+  //   setClickEventListenerForShipCell(view, gameboard, gameboardView, rowCol);
+  // }
   if (!forMachine && shipInfo !== null) {
     view.classList.add('ship');
     addShipSegmentStyleClass(view, shipInfo);
@@ -112,4 +132,8 @@ const createGameboardView = (gameboard, forMachine) => {
   return view;
 };
 
-export { createGameboardView, addShipSegmentStyleClass };
+export {
+  createGameboardView,
+  addShipSegmentStyleClass,
+  setCellStyleClassBasedOnAttackResult,
+};

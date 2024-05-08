@@ -1,6 +1,10 @@
 import createView from '../views';
 import { createPlayerController } from './player';
-import { addShipSegmentStyleClass } from '../views/gameboard';
+import {
+  addShipSegmentStyleClass,
+  setCellStyleClassBasedOnAttackResult,
+} from '../views/gameboard';
+import { AttackResult } from '../utils';
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -18,6 +22,15 @@ const getRandomIndices = () => {
   }
   shuffleArray(indices);
   return indices;
+};
+
+const dispatchShipSunkEvent = (gameboard, view) => {
+  const shipSunkEvent = new CustomEvent('userShipSunk', {
+    detail: {
+      numOfShips: gameboard.getNumberOfShips(),
+    },
+  });
+  view.dispatchEvent(shipSunkEvent);
 };
 
 const createController = () => {
@@ -41,39 +54,31 @@ const createController = () => {
         return;
       }
       const [row, col] = randomIndices.pop();
-      const attackSucceeded = gameboard1Model.receiveAttack(
+      const attackResult = gameboard1Model.receiveAttack(
         gameboard1Model.indicesToCoordinates([row, col]),
       );
       const targetCell = gameboard1View.querySelector(
         `div[data-row="${row}"][data-col="${col}"]`,
       );
-      if (attackSucceeded) {
-        targetCell.classList.add('attacked');
-        const ship = gameboard1Model.getGrid()[row][col][0];
-        if (ship.hasSunk()) {
-          const shipSunkEvent = new CustomEvent('userShipSunk', {
-            detail: {
-              numOfShips: gameboard1Model.getNumberOfShips(),
-            },
-          });
-          player1Controller.getView().dispatchEvent(shipSunkEvent);
-          view.classList.add('sunk');
-          const occupiedCellsIndices =
-            gameboard1Model.getCellsOccupiedByShip(ship);
-          occupiedCellsIndices.forEach((indices) => {
-            console.log(indices);
-            const [row, col] = indices;
-            const occupiedShipInfo = gameboard1Model.getGrid()[row][col][1];
-            const targetCell = gameboard1View.querySelector(
-              `div[data-row="${row}"][data-col="${col}"]`,
-            );
-            addShipSegmentStyleClass(targetCell, occupiedShipInfo);
-            targetCell.classList.add('ship');
-            targetCell.classList.add('sunk');
-          });
-        }
-      } else {
-        targetCell.classList.add('empty-marked');
+      setCellStyleClassBasedOnAttackResult(targetCell, attackResult);
+      if (attackResult !== AttackResult.SUCCESSFUL) return;
+      const ship = gameboard1Model.getGrid()[row][col][0];
+      if (ship.hasSunk()) {
+        dispatchShipSunkEvent(gameboard1Model, player1Controller.getView());
+        view.classList.add('sunk');
+        const occupiedCellsIndices =
+          gameboard1Model.getCellsOccupiedByShip(ship);
+        occupiedCellsIndices.forEach((indices) => {
+          console.log(indices);
+          const [row, col] = indices;
+          const occupiedShipInfo = gameboard1Model.getGrid()[row][col][1];
+          const targetCell = gameboard1View.querySelector(
+            `div[data-row="${row}"][data-col="${col}"]`,
+          );
+          addShipSegmentStyleClass(targetCell, occupiedShipInfo);
+          targetCell.classList.add('ship');
+          targetCell.classList.add('sunk');
+        });
       }
     });
 
