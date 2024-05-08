@@ -50,8 +50,7 @@ const setCellStyleClassBasedOnAttackResult = (cell, attackResult) => {
       break;
     }
     default: {
-      alert('Something went wrong! Bad AttackResult');
-      break;
+      throw new Error('Something went wrong! Bad AttackResult');
     }
   }
 };
@@ -74,8 +73,8 @@ const setClickEventListenerForShipCell = (
     if (ship.hasSunk()) {
       dispatchShipSunkEvent(gameboard);
       cell.classList.add('sunk');
-      const occupiedCellsIndexRowCols = gameboard.getCellsOccupiedByShip(ship);
-      occupiedCellsIndexRowCols.forEach((rowCol) => {
+      const occupiedCellsRowCols = gameboard.getCellsOccupiedByShip(ship);
+      occupiedCellsRowCols.forEach((rowCol) => {
         const [row, col] = rowCol;
         const occupiedShipInfo = gameboard.getGrid()[row][col][1];
         const targetCell = gameboardView.querySelector(
@@ -98,14 +97,6 @@ const createCell = (gameboardView, shipInfo, gameboard, forMachine, rowCol) => {
     view.classList.add('for-machine');
     setClickEventListenerForShipCell(view, gameboard, gameboardView, rowCol);
   }
-  // if (forMachine && shipInfo === null) {
-  //   view.addEventListener('click', () => {
-  //     view.classList.add('empty-marked');
-  //   });
-  // }
-  // if (forMachine && shipInfo !== null) {
-  //   setClickEventListenerForShipCell(view, gameboard, gameboardView, rowCol);
-  // }
   if (!forMachine && shipInfo !== null) {
     view.classList.add('ship');
     addShipSegmentStyleClass(view, shipInfo);

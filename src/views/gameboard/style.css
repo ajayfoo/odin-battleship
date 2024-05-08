@@ -33,51 +33,43 @@
   background-color: greenyellow;
 }
 
-.ship.for-machine.sunk {
-  background-color: black;
-}
-
-.ship.vertical.head {
+.vertical.head {
   border: var(--ship-border);
   height: 40px;
   border-bottom: none;
 }
 
-.ship.vertical.middle {
+.vertical.middle {
   height: 42px;
   border-left: var(--ship-border);
   border-right: var(--ship-border);
 }
 
-.ship.vertical.tail {
+.vertical.tail {
   border: var(--ship-border);
   height: 38px;
   border-top: none;
 }
 
-.ship.horizontal.head {
+.horizontal.head {
   border: var(--ship-border);
   width: 40px;
   border-right: none;
 }
 
-.ship.horizontal.middle {
+.horizontal.middle {
   width: 42px;
   border-top: var(--ship-border);
   border-bottom: var(--ship-border);
 }
 
-.ship.horizontal.tail {
+.horizontal.tail {
   border: var(--ship-border);
   width: 38px;
   border-left: none;
 }
 
-.for-machine.ship.vertical.head,
-.for-machine.ship.vertical.middle,
-.for-machine.ship.vertical.tail,
-.for-machine.ship.horizontal.head,
-.for-machine.ship.horizontal.middle,
-.for-machine.ship.horizontal.tail {
+.ship.sunk {
+  background-color: black;
   border-color: #944e4e;
 }

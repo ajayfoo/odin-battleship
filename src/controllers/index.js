@@ -65,7 +65,6 @@ const createController = () => {
       const ship = gameboard1Model.getGrid()[row][col][0];
       if (ship.hasSunk()) {
         dispatchShipSunkEvent(gameboard1Model, player1Controller.getView());
-        view.classList.add('sunk');
         const occupiedCellsIndices =
           gameboard1Model.getCellsOccupiedByShip(ship);
         occupiedCellsIndices.forEach((indices) => {
@@ -76,7 +75,6 @@ const createController = () => {
             `div[data-row="${row}"][data-col="${col}"]`,
           );
           addShipSegmentStyleClass(targetCell, occupiedShipInfo);
-          targetCell.classList.add('ship');
           targetCell.classList.add('sunk');
         });
       }
