@@ -1,9 +1,47 @@
 .instruction {
+  padding: 0.5em;
   background-color: gainsboro;
   font-size: 1.1em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-items: center;
 }
 
 .instruction > p {
-  padding: 0.5em;
   text-align: center;
+}
+
+.ship-type-radio-button {
+  appearance: none;
+  width: max-content;
+  padding: 0.1em 0.2em;
+  border: 1px solid rebeccapurple;
+  border-radius: 5px;
+  font-size: inherit;
+}
+
+.ship-type-radio-button:checked {
+  background-color: rebeccapurple;
+  color: aliceblue;
+}
+
+#ship-type-carrier::after {
+  content: 'Carrier';
+}
+
+#ship-type-battleship::after {
+  content: 'Battleship';
+}
+
+#ship-type-destroyer::after {
+  content: 'Destroyer';
+}
+
+#ship-type-submarine::after {
+  content: 'Submarine';
+}
+
+#ship-type-patrol-boat::after {
+  content: 'Patrol Boat';
 }
