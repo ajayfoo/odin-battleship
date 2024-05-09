@@ -38,6 +38,12 @@ const createController = () => {
   //   [0, 2],
   // ];
   const player2Controller = createPlayerController('Machine', true);
+
+  const view = createView(
+    player1Controller.getView(),
+    player2Controller.getView(),
+  );
+
   player2Controller
     .getGameboardController()
     .getView()
@@ -62,19 +68,20 @@ const createController = () => {
       }
     });
 
-  window.addEventListener('newGame', () => {
-    player1Controller.getView().classList.remove('gameOver');
-    player2Controller.getView().classList.remove('gameOver');
-  });
-
   window.addEventListener('gameOver', () => {
     player1Controller.getView().classList.add('gameOver');
     player2Controller.getView().classList.add('gameOver');
   });
-  const view = createView(
-    player1Controller.getView(),
-    player2Controller.getView(),
-  );
+
+  const gameStartedEvent = new CustomEvent('gameStarted', {
+    detail: {
+      player1: {
+        numOfShips: gameboard1Model.getNumberOfShips(),
+      },
+    },
+  });
+  window.dispatchEvent(gameStartedEvent);
+
   const getView = () => view;
   return { getView };
 };

@@ -1,0 +1,9 @@
+.instruction {
+  background-color: gainsboro;
+  font-size: 1.1em;
+}
+
+.instruction > p {
+  padding: 0.5em;
+  text-align: center;
+}
