@@ -26,6 +26,21 @@ const applyShipSegmentStyle = (cell, shipInfo) => {
   }
 };
 
+const applyShipStyle = (indexRowCol, gameboard, gameboardView) => {
+  const [i, j] = indexRowCol;
+  const ship = gameboard.getGrid()[i][j][0];
+  const occupiedCellsRowCols = gameboard.getCellsOccupiedByShip(ship);
+  occupiedCellsRowCols.forEach((rowCol) => {
+    const [row, col] = rowCol;
+    const shipInfo = gameboard.getGrid()[row][col][1];
+    const targetCell = gameboardView.querySelector(
+      `div[data-row="${row}"][data-col="${col}"]`,
+    );
+    applyShipSegmentStyle(targetCell, shipInfo);
+    targetCell.classList.add('ship');
+  });
+};
+
 const dispatchShipSunkEvent = (gameboard, view, forMachine = false) => {
   const shipSunkEvent = new CustomEvent(
     forMachine ? 'machineShipSunk' : 'userShipSunk',
@@ -101,7 +116,7 @@ const setClickEventListenerForShipCell = (
   });
 };
 
-const createCell = (gameboardView, shipInfo, gameboard, forMachine, rowCol) => {
+const createCell = (gameboardView, gameboard, forMachine, rowCol) => {
   const view = document.createElement('div');
   view.classList.add('cell');
   view.setAttribute('data-row', rowCol[0]);
@@ -109,10 +124,17 @@ const createCell = (gameboardView, shipInfo, gameboard, forMachine, rowCol) => {
   if (forMachine) {
     view.classList.add('for-machine');
     setClickEventListenerForShipCell(view, gameboard, gameboardView, rowCol);
-  }
-  if (!forMachine && shipInfo !== null) {
-    view.classList.add('ship');
-    applyShipSegmentStyle(view, shipInfo);
+  } else {
+    let shipSize = 5;
+    let isVertical = true;
+    window.addEventListener('newShipDirectionTypeChangedEvent', (event) => {
+      isVertical = event.detail.isVertical;
+    });
+    view.addEventListener('click', () => {
+      const [x, y] = gameboard.indexRowColToCoordinates(rowCol);
+      gameboard.placeShipAt([x, y], isVertical, shipSize);
+      applyShipStyle(rowCol, gameboard, gameboardView);
+    });
   }
   return view;
 };
@@ -121,11 +143,9 @@ const createGameboardView = (gameboard, forMachine) => {
   const view = document.createElement('div');
   view.classList.add('gameboard');
   const [row, col] = gameboard.getSize();
-  const grid = gameboard.getGrid();
   for (let i = 0; i < row; ++i) {
     for (let j = 0; j < col; ++j) {
-      const shipInfo = grid[i][j] === null ? null : grid[i][j][1];
-      const cell = createCell(view, shipInfo, gameboard, forMachine, [i, j]);
+      const cell = createCell(view, gameboard, forMachine, [i, j]);
       view.appendChild(cell);
     }
   }

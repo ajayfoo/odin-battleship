@@ -16,7 +16,7 @@ const predeterminedGameboard = () => {
   return gameboard;
 };
 const createGameboardController = (forMachine) => {
-  const model = predeterminedGameboard();
+  const model = createGameboard();
   const view = createGameboardView(model, forMachine);
   const getModel = () => model;
   const getView = () => view;

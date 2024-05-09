@@ -38,10 +38,33 @@
   content: 'Destroyer';
 }
 
-#ship-type-submarine::after {
-  content: 'Submarine';
-}
-
 #ship-type-patrol-boat::after {
   content: 'Patrol Boat';
+}
+
+.ship-configuration {
+  display: flex;
+}
+
+#ship-direction-type {
+  appearance: none;
+  width: max-content;
+  padding: 0.1em 0.2em;
+  border: 1px solid rebeccapurple;
+  border-radius: 5px;
+  font-size: inherit;
+}
+
+#ship-direction-type:checked {
+  background-color: rebeccapurple;
+  color: aliceblue;
+}
+
+#ship-direction-type::after {
+  content: 'Vertical';
+}
+
+.seperator {
+  font-size: 1.1em;
+  padding: 0.1em 0.2em;
 }

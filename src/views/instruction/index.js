@@ -1,6 +1,6 @@
 import './style.css';
 
-const createShipTypeRaioButton = (shipType) => {
+const createShipTypeRadioButton = (shipType) => {
   const view = document.createElement('input');
   view.setAttribute('type', 'radio');
   view.classList.add('ship-type-radio-button');
@@ -13,12 +13,48 @@ const createShipTypeRaioButton = (shipType) => {
 const createShipTypeRadioButtonGroup = () => {
   const view = document.createElement('div');
   view.classList.add('ship-type-radio-button-group');
+  const carrier = createShipTypeRadioButton('carrier');
+  carrier.checked = true;
   view.append(
-    createShipTypeRaioButton('carrier'),
-    createShipTypeRaioButton('battleship'),
-    createShipTypeRaioButton('destroyer'),
-    createShipTypeRaioButton('submarine'),
-    createShipTypeRaioButton('patrol-boat'),
+    carrier,
+    createShipTypeRadioButton('battleship'),
+    createShipTypeRadioButton('destroyer'),
+    createShipTypeRadioButton('patrol-boat'),
+  );
+  return view;
+};
+
+const createShipDirectionTypeCheckbox = () => {
+  const view = document.createElement('input');
+  view.setAttribute('type', 'checkbox');
+  view.id = 'ship-direction-type';
+  view.ariaLabel = 'ship direction type: vertical';
+  view.addEventListener('click', () => {
+    const newShipDirectionTypeChangedEvent = new CustomEvent(
+      'newShipDirectionTypeChangedEvent',
+      {
+        detail: {
+          isVertical: view.checked,
+        },
+      },
+    );
+    window.dispatchEvent(newShipDirectionTypeChangedEvent);
+  });
+  return view;
+};
+
+const createShipConfiguration = () => {
+  const view = document.createElement('div');
+  view.classList.add('ship-configuration');
+
+  const seperator = document.createElement('span');
+  seperator.textContent = '—';
+  seperator.classList.add('seperator');
+
+  view.append(
+    createShipDirectionTypeCheckbox(),
+    seperator,
+    createShipTypeRadioButtonGroup(),
   );
   return view;
 };
@@ -34,7 +70,7 @@ const createInstruction = () => {
       event.detail.player1.numOfShips +
       ' ship(s)';
   });
-  view.append(instructionEle, createShipTypeRadioButtonGroup());
+  view.append(instructionEle, createShipConfiguration());
   return view;
 };
 
