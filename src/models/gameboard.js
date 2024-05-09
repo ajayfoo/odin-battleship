@@ -19,7 +19,6 @@ const createGameboard = () => {
   const shipCoordinatesList = [];
   const hitCoordinatesList = [];
   let numOfShips = 0;
-  const getGrid = () => grid;
   const getNumberOfShips = () => numOfShips;
   const columnNameToIndex = (alphabet) => {
     const code = alphabet.toUpperCase().charCodeAt(0);
@@ -117,18 +116,27 @@ const createGameboard = () => {
     }
     return arr;
   };
+  const getShipAt = (indexRowCol) => {
+    const [row, col] = indexRowCol;
+    return grid[row][col][0];
+  };
 
+  const getShipInfoAt = (indexRowCol) => {
+    const [row, col] = indexRowCol;
+    return grid[row][col][1];
+  };
   return {
     getSize,
     placeShipAt,
     receiveAttack,
     allShipsHaveSunk,
     getMissedAttackCoordinatesList,
-    getGrid,
     getNumberOfShips,
     coordinatesToIndices,
     indexRowColToCoordinates,
     getCellsOccupiedByShip,
+    getShipAt,
+    getShipInfoAt,
   };
 };
 

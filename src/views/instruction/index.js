@@ -29,6 +29,7 @@ const createShipDirectionTypeCheckbox = () => {
   view.setAttribute('type', 'checkbox');
   view.id = 'ship-direction-type';
   view.ariaLabel = 'ship direction type: vertical';
+  view.checked = true;
   view.addEventListener('click', () => {
     const newShipDirectionTypeChangedEvent = new CustomEvent(
       'newShipDirectionTypeChangedEvent',

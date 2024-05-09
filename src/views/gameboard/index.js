@@ -27,12 +27,11 @@ const applyShipSegmentStyle = (cell, shipInfo) => {
 };
 
 const applyShipStyle = (indexRowCol, gameboard, gameboardView) => {
-  const [i, j] = indexRowCol;
-  const ship = gameboard.getGrid()[i][j][0];
+  const ship = gameboard.getShipAt(indexRowCol);
   const occupiedCellsRowCols = gameboard.getCellsOccupiedByShip(ship);
   occupiedCellsRowCols.forEach((rowCol) => {
     const [row, col] = rowCol;
-    const shipInfo = gameboard.getGrid()[row][col][1];
+    const shipInfo = gameboard.getShipInfoAt(rowCol);
     const targetCell = gameboardView.querySelector(
       `div[data-row="${row}"][data-col="${col}"]`,
     );
@@ -77,7 +76,7 @@ const applySunkShipStyle = (gameboard, gameboardView, ship) => {
   const occupiedCellsRowCols = gameboard.getCellsOccupiedByShip(ship);
   occupiedCellsRowCols.forEach((rowCol) => {
     const [row, col] = rowCol;
-    const occupiedShipInfo = gameboard.getGrid()[row][col][1];
+    const occupiedShipInfo = gameboard.getShipInfoAt(rowCol);
     const targetCell = gameboardView.querySelector(
       `div[data-row="${row}"][data-col="${col}"]`,
     );
@@ -101,8 +100,7 @@ const setClickEventListenerForShipCell = (
     const userPlayedEvent = new CustomEvent('userPlayed');
     gameboardView.dispatchEvent(userPlayedEvent);
     if (attackResult === AttackResult.FAILED) return;
-    const [i, j] = indexRowCol;
-    const ship = gameboard.getGrid()[i][j][0];
+    const ship = gameboard.getShipAt(indexRowCol);
     if (ship.hasSunk()) {
       dispatchShipSunkEvent(gameboard, window, true);
       applySunkShipStyle(gameboard, gameboardView, ship);

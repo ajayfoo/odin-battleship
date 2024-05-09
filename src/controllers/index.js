@@ -61,7 +61,7 @@ const createController = () => {
       );
       applyCellStyleBasedOnAttackResult(targetCell, attackResult);
       if (attackResult !== AttackResult.SUCCESSFUL) return;
-      const ship = gameboard1Model.getGrid()[row][col][0];
+      const ship = gameboard1Model.getShipAt([row, col]);
       if (ship.hasSunk()) {
         dispatchShipSunkEvent(gameboard1Model, player1Controller.getView());
         applySunkShipStyle(gameboard1Model, gameboard1View, ship);
