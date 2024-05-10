@@ -32,11 +32,6 @@ const createController = () => {
   const gameboard1View = player1Controller.getGameboardController().getView();
 
   const randomIndexRowCols = getRandomIndexRowCols();
-  // const randomIndexRowCols = [
-  //   [0, 0],
-  //   [0, 1],
-  //   [0, 2],
-  // ];
   const player2Controller = createPlayerController('Machine', true);
 
   const view = createView(
@@ -65,6 +60,12 @@ const createController = () => {
       if (ship.hasSunk()) {
         dispatchShipSunkEvent(gameboard1Model, player1Controller.getView());
         applySunkShipStyle(gameboard1Model, gameboard1View, ship);
+        if (gameboard1Model.getNumberOfShips() === 0) {
+          const gameOverEvent = new CustomEvent('gameOver');
+          window.dispatchEvent(gameOverEvent);
+          const playerWonEvent = new CustomEvent('machineWon');
+          window.dispatchEvent(playerWonEvent);
+        }
       }
     });
 
@@ -73,7 +74,7 @@ const createController = () => {
     player2Controller.getView().classList.add('gameOver');
   });
 
-  const INITIAL_NUMBER_OF_SHIPS = 2;
+  const INITIAL_NUMBER_OF_SHIPS = 10;
   const gameStartedEvent = new CustomEvent('gameStarted', {
     detail: {
       player1: {

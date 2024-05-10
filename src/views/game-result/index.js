@@ -11,6 +11,10 @@ const createGameResult = () => {
     resultEle.textContent = 'User Has Won!';
   });
 
+  window.addEventListener('machineWon', () => {
+    resultEle.textContent = 'Machine Has Won!';
+  });
+
   const newGameBtn = document.createElement('button');
   newGameBtn.setAttribute('type', 'button');
   newGameBtn.textContent = 'New Game';
