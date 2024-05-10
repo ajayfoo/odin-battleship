@@ -88,7 +88,7 @@ const createInstruction = () => {
       'Player1 please place your ' + numOfShipsLeftToPlace + ' ship(s)';
   });
 
-  window.addEventListener('newShipPlaced', () => {
+  window.addEventListener('userShipPlaced', () => {
     instructionEle.textContent =
       'Player1 please place your ' + --numOfShipsLeftToPlace + ' ship(s)';
     if (numOfShipsLeftToPlace === 0) {
