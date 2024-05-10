@@ -135,6 +135,8 @@ const createCell = (gameboardView, gameboard, forMachine, rowCol) => {
       const [x, y] = gameboard.indexRowColToCoordinates(rowCol);
       gameboard.placeShipAt([x, y], isVertical, shipSize);
       applyShipStyle(rowCol, gameboard, gameboardView);
+      const newShipPlaced = new CustomEvent('newShipPlaced');
+      window.dispatchEvent(newShipPlaced);
     });
   }
   return view;

@@ -80,12 +80,24 @@ const createInstruction = () => {
   view.classList.add('instruction');
   const instructionEle = document.createElement('p');
 
+  let numOfShips = null;
+
   window.addEventListener('gameStarted', (event) => {
+    numOfShips = event.detail.player1.numOfShips;
     instructionEle.textContent =
       'Player1 please place your ' +
       event.detail.player1.numOfShips +
       ' ship(s)';
   });
+
+  window.addEventListener('newShipPlaced', () => {
+    instructionEle.textContent =
+      'Player1 please place your ' + --numOfShips + ' ship(s)';
+    if (numOfShips === 0) {
+      view.remove();
+    }
+  });
+
   view.append(instructionEle, createShipConfiguration());
   return view;
 };

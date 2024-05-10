@@ -5,7 +5,7 @@ const createGameResult = () => {
   view.classList.add('game-result');
 
   const resultEle = document.createElement('p');
-  resultEle.textContent = 'Game Result yet to be determined';
+  resultEle.textContent = 'Game result yet to be determined';
 
   window.addEventListener('userWon', () => {
     resultEle.textContent = 'User Has Won!';

@@ -57,6 +57,7 @@ const createGameboard = () => {
     const [headX, headY] = coordinatesToIndices(coordinates);
     let x = headX;
     let y = headY;
+    console.log(`x:${x}, y:${y}`);
     if (!shipCanBePlacedAt(x, y, ship, vertical)) {
       throw new Error("Ships can't overlap");
     }
