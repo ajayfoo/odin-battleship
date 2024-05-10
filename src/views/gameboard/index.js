@@ -125,8 +125,11 @@ const createCell = (gameboardView, gameboard, forMachine, rowCol) => {
   } else {
     let shipSize = 5;
     let isVertical = true;
-    window.addEventListener('newShipDirectionTypeChangedEvent', (event) => {
+    window.addEventListener('newShipDirectionTypeChanged', (event) => {
       isVertical = event.detail.isVertical;
+    });
+    window.addEventListener('newShipTypeChanged', (event) => {
+      shipSize = event.detail.shipSize;
     });
     view.addEventListener('click', () => {
       const [x, y] = gameboard.indexRowColToCoordinates(rowCol);

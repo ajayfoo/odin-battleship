@@ -1,5 +1,7 @@
 import './style.css';
 
+import { ShipSize, htmlIdToJsIndentifier } from '../../utils';
+
 const createShipTypeRadioButton = (shipType) => {
   const view = document.createElement('input');
   view.setAttribute('type', 'radio');
@@ -7,20 +9,33 @@ const createShipTypeRadioButton = (shipType) => {
   view.name = 'ship-type';
   view.id = 'ship-type-' + shipType;
   view.ariaLabel = 'Ship Type ' + shipType;
+  view.value = ShipSize[htmlIdToJsIndentifier(shipType)];
   return view;
 };
 
 const createShipTypeRadioButtonGroup = () => {
   const view = document.createElement('div');
   view.classList.add('ship-type-radio-button-group');
-  const carrier = createShipTypeRadioButton('carrier');
-  carrier.checked = true;
-  view.append(
-    carrier,
+  const radioButtons = [
+    createShipTypeRadioButton('carrier'),
     createShipTypeRadioButton('battleship'),
     createShipTypeRadioButton('destroyer'),
     createShipTypeRadioButton('patrol-boat'),
-  );
+  ];
+  radioButtons[0].checked = true;
+  radioButtons.forEach((radioButton) => {
+    radioButton.addEventListener('change', () => {
+      if (radioButton.checked) {
+        const newShipTypeChangedEvent = new CustomEvent('newShipTypeChanged', {
+          detail: {
+            shipSize: parseInt(radioButton.value),
+          },
+        });
+        window.dispatchEvent(newShipTypeChangedEvent);
+      }
+    });
+    view.appendChild(radioButton);
+  });
   return view;
 };
 
@@ -32,7 +47,7 @@ const createShipDirectionTypeCheckbox = () => {
   view.checked = true;
   view.addEventListener('click', () => {
     const newShipDirectionTypeChangedEvent = new CustomEvent(
-      'newShipDirectionTypeChangedEvent',
+      'newShipDirectionTypeChanged',
       {
         detail: {
           isVertical: view.checked,
@@ -45,7 +60,7 @@ const createShipDirectionTypeCheckbox = () => {
 };
 
 const createShipConfiguration = () => {
-  const view = document.createElement('div');
+  const view = document.createElement('form');
   view.classList.add('ship-configuration');
 
   const seperator = document.createElement('span');
