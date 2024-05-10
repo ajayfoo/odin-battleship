@@ -63,7 +63,7 @@ const applyCellStyleBasedOnAttackResult = (cell, attackResult) => {
       break;
     }
     case AttackResult.REDUNDANT: {
-      alert("Can't Attack the location twice");
+      alert("Can't attack the same location twice");
       break;
     }
     default: {
