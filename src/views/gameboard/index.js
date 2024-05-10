@@ -131,6 +131,9 @@ const createCell = (gameboardView, gameboard, forMachine, rowCol) => {
     window.addEventListener('newShipTypeChanged', (event) => {
       shipSize = event.detail.shipSize;
     });
+    window.addEventListener('allShipsPlaced', () => {
+      view.classList.add('disabled');
+    });
     view.addEventListener('click', () => {
       const [x, y] = gameboard.indexRowColToCoordinates(rowCol);
       gameboard.placeShipAt([x, y], isVertical, shipSize);

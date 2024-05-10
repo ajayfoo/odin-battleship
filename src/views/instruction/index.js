@@ -80,21 +80,21 @@ const createInstruction = () => {
   view.classList.add('instruction');
   const instructionEle = document.createElement('p');
 
-  let numOfShips = null;
+  let numOfShipsLeftToPlace = null;
 
   window.addEventListener('gameStarted', (event) => {
-    numOfShips = event.detail.player1.numOfShips;
+    numOfShipsLeftToPlace = event.detail.player1.numOfShips;
     instructionEle.textContent =
-      'Player1 please place your ' +
-      event.detail.player1.numOfShips +
-      ' ship(s)';
+      'Player1 please place your ' + numOfShipsLeftToPlace + ' ship(s)';
   });
 
   window.addEventListener('newShipPlaced', () => {
     instructionEle.textContent =
-      'Player1 please place your ' + --numOfShips + ' ship(s)';
-    if (numOfShips === 0) {
+      'Player1 please place your ' + --numOfShipsLeftToPlace + ' ship(s)';
+    if (numOfShipsLeftToPlace === 0) {
       view.remove();
+      const allShipsPlacedEvent = new CustomEvent('allShipsPlaced');
+      window.dispatchEvent(allShipsPlacedEvent);
     }
   });
 

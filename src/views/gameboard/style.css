@@ -14,8 +14,13 @@
   --ship-border: 2px solid slateblue;
 }
 
-.cell.for-machine {
+.cell {
   cursor: pointer;
+}
+
+.cell.disabled {
+  cursor: unset;
+  pointer-events: none;
 }
 
 .ship {

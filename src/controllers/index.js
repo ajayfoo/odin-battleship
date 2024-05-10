@@ -73,7 +73,7 @@ const createController = () => {
     player2Controller.getView().classList.add('gameOver');
   });
 
-  const INITIAL_NUMBER_OF_SHIPS = 10;
+  const INITIAL_NUMBER_OF_SHIPS = 2;
   const gameStartedEvent = new CustomEvent('gameStarted', {
     detail: {
       player1: {
