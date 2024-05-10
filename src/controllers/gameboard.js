@@ -4,7 +4,7 @@ import { createGameboard } from '../models/gameboard';
 const predeterminedGameboard = () => {
   const gameboard = createGameboard();
   gameboard.placeShipAt([1, 'A'], false, 2);
-  // gameboard.placeShipAt([1, 'D'], true, 3);
+  gameboard.placeShipAt([1, 'D'], true, 3);
   // gameboard.placeShipAt([1, 'G'], false, 4);
   // gameboard.placeShipAt([3, 'A'], true, 4);
   // gameboard.placeShipAt([3, 'F'], false, 3);
@@ -16,7 +16,7 @@ const predeterminedGameboard = () => {
   return gameboard;
 };
 const createGameboardController = (forMachine) => {
-  const model = createGameboard();
+  const model = forMachine ? predeterminedGameboard() : createGameboard();
   const view = createGameboardView(model, forMachine);
   const getModel = () => model;
   const getView = () => view;

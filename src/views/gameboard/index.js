@@ -121,6 +121,10 @@ const createCell = (gameboardView, gameboard, forMachine, rowCol) => {
   view.setAttribute('data-col', rowCol[1]);
   if (forMachine) {
     view.classList.add('for-machine');
+    view.classList.add('disabled');
+    window.addEventListener('allShipsPlaced', () => {
+      view.classList.remove('disabled');
+    });
     setClickEventListenerForShipCell(view, gameboard, gameboardView, rowCol);
   } else {
     let shipSize = 5;
